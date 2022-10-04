@@ -93,24 +93,10 @@ public class BasicDriving extends LinearOpMode {
                 driveScaleFactor = 1;
             }
 
-            leftFrontPower    = drive + turn + strafe;
-            leftRearPower   = drive + turn - strafe;
-            rightFrontPower    = drive - turn - strafe;
-            rightRearPower   = drive - turn + strafe;
-
-            scaleFactor = driveScaleFactor * Utils.scalePower(leftFrontPower, leftRearPower, rightFrontPower, rightRearPower);
-
-            leftRearPower = leftRearPower * scaleFactor;
-            leftFrontPower = leftFrontPower * scaleFactor;
-            rightFrontPower = rightFrontPower * scaleFactor;
-            rightRearPower = rightRearPower * scaleFactor;
-
-            // Send calculated power to wheels
-            myRobot.drive.setMotorPowers(leftFrontPower, leftRearPower, rightFrontPower, rightRearPower);
+            myRobot.drive.teleDrive(drive, turn, strafe, driveScaleFactor);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "leftFront (%.2f), rightFront (%.2f)", leftFrontPower, rightFrontPower);
             telemetry.update();
 
         }

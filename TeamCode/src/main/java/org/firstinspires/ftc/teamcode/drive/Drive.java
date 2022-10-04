@@ -63,7 +63,7 @@ public class Drive {
      * @param rightRearPwr
      */
     public void setMotorPowers(double leftFrontPwr, double leftRearPwr,
-                               double rightFrontPwr, double rightRearPwr){
+                               double rightRearPwr, double rightFrontPwr) {
 
         leftFront.setPower(leftFrontPwr);
         leftRear.setPower(leftRearPwr);

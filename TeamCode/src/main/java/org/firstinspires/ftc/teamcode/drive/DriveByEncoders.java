@@ -23,14 +23,14 @@ import static org.firstinspires.ftc.teamcode.util.Utils.sleep;
 public class DriveByEncoders {
     public boolean CompetitionMode = true;
 
-    public Drive drive;
+    public HowellMecanumDrive drive;
     private Telemetry telemetry;
     private HardwareMap hardwareMap;
 
     private final String IMU_GYRO = "imu";
 
-    private final int MEC_DRIVE_CARDINAL_COUNTS_PER_INCH = (int)Math.round(Drive.ticksPerInch);
-    private final int MEC_DRIVE_DIAG_COUNTS_PER_INCH = (int)Math.round(Drive.ticksPerInch);
+    private final int MEC_DRIVE_CARDINAL_COUNTS_PER_INCH = (int)Math.round(DriveConstants.TICKS_PER_INCH);
+    private final int MEC_DRIVE_DIAG_COUNTS_PER_INCH = (int)Math.round(DriveConstants.TICKS_PER_INCH);
 
     public double STRAFE_CORRECTION_FACTOR = 0;
     public double AUTON_DRIVE_RAMP_RATE = 0.25; //Rate per second.  1 = 100% power in 1 s.
@@ -63,7 +63,7 @@ public class DriveByEncoders {
     Acceleration GyroGravity = null;
     BNO055IMU.Parameters GyroParameters = null;
 
-    public DriveByEncoders(HardwareMap hardwareMap, Drive drive, Telemetry telemetry) {
+    public DriveByEncoders(HardwareMap hardwareMap, HowellMecanumDrive drive, Telemetry telemetry) {
         this.hardwareMap = hardwareMap;
         this.drive = drive;
         this.telemetry = telemetry;
