@@ -320,6 +320,11 @@ public class HowellMecanumDrive extends MecanumDrive {
         return new ProfileAccelerationConstraint(maxAccel);
     }
 
+
+    //**********************************************************************************************************
+    //***************  Team Specific Code Added Below Here.  Need to Copy/Paste if Updating RR  ****************
+    //**********************************************************************************************************
+
     public void teleDrive(double drivePwr, double turnPwr, double strafePwr, double driveScaleFactor){
         double leftFrontPower    = drivePwr + turnPwr + strafePwr;
         double leftRearPower   = drivePwr + turnPwr - strafePwr;
