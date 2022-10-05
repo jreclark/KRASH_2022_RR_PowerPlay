@@ -40,6 +40,8 @@ public class AprilTagDetector {
 
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
+    int cameraMonitorViewId;
+    int locationDetected = 0;
 
     static final double FEET_PER_METER = 3.28084;
 
@@ -70,7 +72,13 @@ public class AprilTagDetector {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+
+
+
+    }
+
+    public void init(){
+        cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
 
@@ -86,8 +94,6 @@ public class AprilTagDetector {
 
             }
         });
-
-
     }
 
     /**
@@ -95,7 +101,6 @@ public class AprilTagDetector {
      * If the method returns 0, then no correct tag has been identified.
      */
     public int updateAprilTagDetections() {
-        int locationDetected = 0;
 
         // Calling getDetectionsUpdate() will only return an object if there was a new frame
         // processed since the last time we called it. Otherwise, it will return null. This
@@ -149,8 +154,9 @@ public class AprilTagDetector {
                             locationDetected = 3;
                             break;
                         default:
-                            // Don't update locationDetected.  One of the other detections might be correct.
+                            locationDetected = 0;
                     }
+
                     if (locationDetected != 0) {
                         //Found a valid target.  Stop checking.
                         break;
@@ -158,6 +164,9 @@ public class AprilTagDetector {
                 }
             }
         }
+
+        //telemetry.addData("Location Detected: ", locationDetected);
+        //telemetry.update();
 
         return locationDetected;
     }

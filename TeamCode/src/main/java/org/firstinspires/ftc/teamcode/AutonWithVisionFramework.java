@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.AprilTags.AprilTagDetector;
 import org.firstinspires.ftc.teamcode.drive.DriveByEncoders;
 
 @Autonomous
-@Disabled
+//@Disabled
 public class AutonWithVisionFramework extends LinearOpMode {
 
     public Robot robot;
@@ -21,11 +21,14 @@ public class AutonWithVisionFramework extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
         aprilTagDetector = new AprilTagDetector(hardwareMap, telemetry);
+        aprilTagDetector.init();
 
 
 
         while (!isStarted() && !isStopRequested()){
             sleeveVal = aprilTagDetector.updateAprilTagDetections();
+            telemetry.addData("Position: ", sleeveVal);
+            telemetry.update();
         }
 
         switch (sleeveVal){
