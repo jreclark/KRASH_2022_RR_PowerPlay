@@ -69,6 +69,8 @@ public class BasicDriving extends LinearOpMode {
         double strafe;
         double leftFrontPower, leftRearPower, rightFrontPower, rightRearPower;
 
+        double armPower;
+
         telemetry.addData("Status", "Initialized");
         telemetry.addLine("Press start to begin ...");
         telemetry.update();
@@ -81,8 +83,9 @@ public class BasicDriving extends LinearOpMode {
         // should ALWAYS be checking opModeIsActive() in teleOp loop
         while (opModeIsActive()) {
 
-            // POV Mode uses left stick to go forward, and right stick to turn.
-            // - This uses basic math to combine motions and is easier to drive straight.
+            /***************************************************************
+             * Driver Controls
+             ***************************************************************/
             drive = -gamepad1.left_stick_y;
             turn  =  gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
@@ -94,6 +97,21 @@ public class BasicDriving extends LinearOpMode {
             }
 
             myRobot.drive.teleDrive(drive, turn, strafe, driveScaleFactor);
+
+            /***************************************************************
+             * Manipulator Controls
+             ***************************************************************/
+            //Elevator Control
+            armPower = -gamepad2.right_stick_x;
+
+            if(Math.abs(armPower) > 0.1){
+                myRobot.arm.runElevator(armPower);
+            } else if (!myRobot.arm.elevatorIsBusy()){
+                myRobot.arm.holdElevator();
+            }
+
+            
+
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());

@@ -17,12 +17,14 @@ public class Robot {
     private Telemetry telemetry;
 
     public HowellMecanumDrive drive;
+    public Arm arm;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
         drive = new HowellMecanumDrive(hardwareMap, telemetry);
+        arm = new Arm(hardwareMap, telemetry);
     }
 
 
