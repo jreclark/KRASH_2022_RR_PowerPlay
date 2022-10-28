@@ -110,11 +110,15 @@ public class BasicDriving extends LinearOpMode {
                 myRobot.arm.holdElevator();
             }
 
-            
+            if(gamepad2.dpad_up){
+                myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.HIGH);
+            }
 
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Elevator Position", myRobot.arm.getElevatorPosition());
+            telemetry.addData("Elevator Power / Current", " %0.2f / %0.2f", myRobot.arm.getElevatorPower(), myRobot.arm.getElevatorCurrent());
             telemetry.update();
 
         }

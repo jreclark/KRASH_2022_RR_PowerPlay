@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 /**
  * Robot class should contain all of your robot subsystems.
@@ -34,6 +35,24 @@ public class Arm {
 
     //Elevator PIDF Values
     private static final double KV = 0.1;
+
+    //Elevator positions
+    public static enum ElevatorPositions{
+        HIGH(1500),
+        MID(1000),
+        SHORT(800),
+        LOW(500),
+        PIVOT_POINT(800),
+        START_AUTO_GRAB(800),
+        START_GROUND_GRAB(600),
+        DELTA_DROP(100);
+
+        public final int position;
+
+        private ElevatorPositions(int position){
+            this.position = position;
+        }
+    }
 
     public Arm(HardwareMap hardwareMap, Telemetry telemetry) {
         this.hardwareMap = hardwareMap;
@@ -77,6 +96,10 @@ public class Arm {
         elevator.setPower(1.0);
     }
 
+    public void elevatorPositionByConstant(ElevatorPositions constant){
+        elevatorPositionControl(constant.position);
+    }
+
     public void holdElevator(){
         elevatorPositionControl(elevator.getCurrentPosition());
     }
@@ -87,6 +110,14 @@ public class Arm {
 
     public boolean elevatorIsBusy() {
         return elevator.isBusy();
+    }
+
+    public double getElevatorPower(){
+        return elevator.getPower();
+    }
+
+    public double getElevatorCurrent(){
+        return elevator.getCurrent(CurrentUnit.AMPS);
     }
 
 

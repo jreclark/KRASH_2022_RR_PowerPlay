@@ -30,6 +30,7 @@ import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.util.ArrayList;
 
@@ -38,7 +39,7 @@ public class AprilTagDetector {
     HardwareMap hardwareMap;
     Telemetry telemetry;
 
-    OpenCvCamera camera;
+    OpenCvWebcam camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
     int cameraMonitorViewId;
     int locationDetected = 0;
@@ -73,8 +74,6 @@ public class AprilTagDetector {
         this.telemetry = telemetry;
 
 
-
-
     }
 
     public void init() {
@@ -84,23 +83,19 @@ public class AprilTagDetector {
 
         camera.setPipeline(aprilTagDetectionPipeline);
 
-        int attempts = 2;
-        int count = 1;
+        camera.setMillisecondsPermissionTimeout(2500);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
+            }
 
-        while (count <= 2 && camera.getFps() == 0) {
-            camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-                @Override
-                public void onOpened() {
-                    camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
-                }
+            @Override
+            public void onError(int errorCode) {
 
-                @Override
-                public void onError(int errorCode) {
+            }
+        });
 
-                }
-            });
-        }
-        count++;
 
     }
 
