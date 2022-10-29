@@ -45,7 +45,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 2; // in
     public static double GEAR_RATIO = 19.2; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 12; // in
+    public static double TRACK_WIDTH = 11; // in
 
     public static final double INCHES_PER_WHEEL_REV = Math.PI * WHEEL_RADIUS * 2;
     public static final double INCHES_PER_MOTOR_REV = INCHES_PER_WHEEL_REV / GEAR_RATIO;
