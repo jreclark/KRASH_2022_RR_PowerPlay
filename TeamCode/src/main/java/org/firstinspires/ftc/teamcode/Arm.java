@@ -82,7 +82,7 @@ public class Arm {
     }
 
     /***********************************
-     * LIFT METHODS
+     * ELEVATOR METHODS
      ***********************************/
 
     public void runElevator(double power){
