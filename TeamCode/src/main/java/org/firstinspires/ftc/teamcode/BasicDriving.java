@@ -60,9 +60,13 @@ public class BasicDriving extends LinearOpMode {
     private double SLOW_SCALE_FACTOR = 0.5;
     private double driveScaleFactor = 1;
 
+    private boolean elevatorInHold = true;
+    private boolean elevatorManualOp = false;
+
     @Override
     public void runOpMode() {
         myRobot = new Robot(hardwareMap, telemetry);
+
 
         double drive;
         double turn;
@@ -102,24 +106,67 @@ public class BasicDriving extends LinearOpMode {
              * Manipulator Controls
              ***************************************************************/
             //Elevator Control
-            armPower = -gamepad2.right_stick_x;
+            armPower = -gamepad2.right_stick_y;
 
-            myRobot.arm.runElevator(armPower);
-//            if(Math.abs(armPower) > 0.1){
-//                myRobot.arm.runElevator(armPower);
-//            } else if (!myRobot.arm.elevatorIsBusy()){
-//                myRobot.arm.holdElevator();
-//            }
-//
-//            if(gamepad2.dpad_up){
-//                myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.HIGH);
+//            myRobot.arm.runElevator(armPower);
+            if (Math.abs(armPower) > 0.05) {
+                myRobot.arm.runElevator(armPower);
+                elevatorInHold = false;
+                elevatorManualOp = true;
+            } else if (elevatorManualOp && !elevatorInHold) {
+                myRobot.arm.holdElevator();
+                elevatorInHold = true;
+                elevatorManualOp = false;
+            }
+
+            if (gamepad2.dpad_up) {
+                myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.HIGH);
+                elevatorManualOp = false;
+            } else if (gamepad2.dpad_right) {
+                myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.MID);
+                elevatorManualOp = false;
+            } else if (gamepad2.dpad_down) {
+                myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.SHORT);
+                elevatorManualOp = false;
+            } else if (gamepad2.dpad_left){
+                myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.LOW);
+            } else if (gamepad2.a) {
+                if(myRobot.arm.isRotateFront()){
+                    myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.START_GROUND_GRAB);
+                } else if(myRobot.arm.isSafeToRotate()){
+                    myRobot.arm.setRotateFront();
+                } else {
+                    myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.PIVOT_POINT);
+                }
+            }
+
+            if(gamepad2.right_trigger>0.85){
+                myRobot.arm.groundGrab();
+            } else if(gamepad2.right_trigger > 0.1){
+                myRobot.arm.setGrabberClosed();
+            } else if(gamepad2.left_trigger > 0.1){
+                myRobot.arm.setGrabberOpen();
+            }
+
+            if(gamepad2.right_bumper && myRobot.arm.isSafeToRotate()){
+                myRobot.arm.setRotateFront();
+            } else if(gamepad2.left_bumper && myRobot.arm.isSafeToRotate()){
+                myRobot.arm.setRotateBack();
+            }
+
+            //Update PIDF Values.
+            //TODO: Can delete once tuning is complete.
+//            if(gamepad2.a){
+//                myRobot.arm.setPIDFValues();
 //            }
 
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Elevator Position", myRobot.arm.getElevatorPosition());
-            //telemetry.addData("Elevator Power / Current", " %0.2f / %0.2f", myRobot.arm.getElevatorPower(), myRobot.arm.getElevatorCurrent());
+            telemetry.addData("Elevator in hold", elevatorInHold);
+            telemetry.addData("Elevator busy", myRobot.arm.elevatorIsBusy());
+            //myRobot.arm.telemetryPIDF();
             telemetry.update();
 
         }

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
  * This class can then be instanced in all of your teleOp and Auton
  * classes to give consistent behavior across all of them.
  */
+@Config
 public class Arm {
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
@@ -27,25 +29,29 @@ public class Arm {
     private Servo grabby;
     private Servo rotate;
 
-    private double ROTATE_FRONT = 0;
-    private double ROTATE_BACK = 0.6;
+    public static double ROTATE_FRONT = 0.78;
+    public static double ROTATE_BACK = 0.1;
 
-    private double GRABBY_OPEN = 0;
-    private double GRABBY_CLOSE = 0.6;
+    public static double GRABBY_OPEN = 0.0;
+    public static double GRABBY_CLOSE = 0.7;
 
     //Elevator PIDF Values
-    private static final double KV = 0.1;
+    public static double KV = 0.1;
+    public static double KP=15;
+    public static double KvP=8;
+    public static double KvD=0;
+    public static double KvI=2.5;
 
     //Elevator positions
     public static enum ElevatorPositions{
-        HIGH(1500),
-        MID(1000),
-        SHORT(800),
-        LOW(500),
-        PIVOT_POINT(800),
+        HIGH(5250),
+        MID(3700),
+        SHORT(2250),
+        LOW(300),
+        PIVOT_POINT(2250),
         START_AUTO_GRAB(800),
-        START_GROUND_GRAB(600),
-        DELTA_DROP(100);
+        START_GROUND_GRAB(700),
+        DELTA_DROP(500);
 
         public final int position;
 
@@ -67,10 +73,25 @@ public class Arm {
         elevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         elevator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        PIDFCoefficients origPIDF = elevator.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
-        elevator.setVelocityPIDFCoefficients(origPIDF.p, origPIDF.i, origPIDF.d, KV);
+        setPIDFValues();
+//        PIDFCoefficients origPIDF = elevator.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+//        KP = elevator.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).p;
+//        KvP = origPIDF.p;
+//        KvI = origPIDF.i;
+//        KvD = origPIDF.d;
+//        elevator.setVelocityPIDFCoefficients(origPIDF.p, origPIDF.i, origPIDF.d, KV);
     }
 
+
+
+    public void groundGrab(){
+        elevatorPositionControl(25);
+        if(elevator.getCurrentPosition() < 50){
+            setGrabberClosed();
+        } else {
+            setGrabberOpen();
+        }
+    }
 
     /***********************************
      * GRABBER METHODS
@@ -81,11 +102,50 @@ public class Arm {
         rotate.setPosition(ROTATE_FRONT);
     }
 
+    public void setGrabberOpen(){
+        grabby.setPosition(GRABBY_OPEN);
+    }
+
+    public void setGrabberClosed(){
+        grabby.setPosition(GRABBY_CLOSE);
+    }
+
+    public void setRotateFront(){
+        rotate.setPosition(ROTATE_FRONT);
+    }
+
+    public void setRotateBack(){
+        rotate.setPosition(ROTATE_BACK);
+    }
+
+    public boolean isRotateFront(){
+        double pos = rotate.getPosition();
+        if(pos >= ROTATE_FRONT - 0.1 && pos <= ROTATE_FRONT + 0.1){
+            return true;
+        } else {return false;}
+    }
+
+    public boolean isRotateBack(){
+        double pos = rotate.getPosition();
+        if(pos >= ROTATE_BACK - 0.1 && pos <= ROTATE_BACK + 0.1){
+            return true;
+        } else {return false;}
+    }
+
     /***********************************
      * ELEVATOR METHODS
      ***********************************/
 
     public void runElevator(double power){
+        int pos = elevator.getCurrentPosition();
+
+        if(power > 0 && pos > .9 * ElevatorPositions.HIGH.position){
+            power = power * 0.5;
+        } else if (power < 0 && pos < 300 && pos > 0){
+            power = power * 0.5;
+        } else if (power < 0 && pos <= 0){
+            power = 0;
+        }
         elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         elevator.setPower(power);
     }
@@ -118,6 +178,26 @@ public class Arm {
 
     public double getElevatorCurrent(){
         return elevator.getCurrent(CurrentUnit.AMPS);
+    }
+
+    public boolean isSafeToRotate() {
+        if (elevator.getCurrentPosition() > 0.96*ElevatorPositions.PIVOT_POINT.position) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void telemetryPIDF(){
+        telemetry.addData("KP", KP);
+        telemetry.addData("KvP", KvP);
+        telemetry.addData("KvI", KvI);
+        telemetry.addData("KvD", KvD);
+    }
+
+    public void setPIDFValues(){
+        elevator.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(KP, 0,0,0));
+        elevator.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(KvP, KvI, KvD, KV));
     }
 
 
