@@ -7,9 +7,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+
+
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.util.Utils;
 
 /**
  * Robot class should contain all of your robot subsystems.
@@ -23,13 +27,19 @@ public class Arm {
 
     private ElapsedTime timer = new ElapsedTime();
     private ElapsedTime rotateTimer = new ElapsedTime();
+    private ElapsedTime autoGrabTimer = new ElapsedTime();
     private double m_timeout = 0;
+    private double autoGrabTimeout = 1.0;
+
 
     private DcMotorEx elevator;
 
     private Servo grabby;
     private Servo rotate;
     double ROTATE_DELAY = 1.0;
+
+    private DigitalChannel coneSensor;
+
 
     public static double ROTATE_FRONT = 0.78;
     public static double ROTATE_BACK = 0.1;
@@ -66,6 +76,9 @@ public class Arm {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
+        coneSensor = hardwareMap.get(DigitalChannel.class, "cone_sensor");
+        coneSensor.setMode(DigitalChannel.Mode.INPUT);
+
         elevator = hardwareMap.get(DcMotorEx.class, "elevator");
 
         grabby = hardwareMap.get(Servo.class, "grabby");
@@ -92,6 +105,20 @@ public class Arm {
         } else {
             setGrabberOpen();
         }
+    }
+
+    public void stackGrab(){
+
+        setGrabberOpen();
+        runElevator(-0.2);
+        autoGrabTimer.reset();
+
+        while(!coneSensor.getState() && autoGrabTimer.seconds() <= autoGrabTimeout){
+
+        }
+        runElevator(0.1);
+        setGrabberOpen();
+        Utils.sleep(1000);
     }
 
     /***********************************

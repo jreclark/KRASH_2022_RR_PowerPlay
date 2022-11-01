@@ -19,29 +19,32 @@ public class AutonTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
+        robot.arm.initGrabber();
         //aprilTagDetector = new AprilTagDetector(hardwareMap, telemetry);
         //aprilTagDetector.init();
 
-        Pose2d startPose = new Pose2d(34, -63, Math.toRadians(-90));
+        Pose2d startPose = new Pose2d(34, -63, Math.toRadians(90));
 
         robot.drive.setPoseEstimate(startPose);
 
-        TrajectorySequence test = robot.drive.trajectorySequenceBuilder(startPose)
-                .setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(34, -24, Math.toRadians(-90)), Math.toRadians(-90))
-//                .setTangent(Math.toRadians(90))
+        TrajectorySequence firstDrop = robot.drive.trajectorySequenceBuilder(startPose)
+                .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(90))
+                .addDisplacementMarker(() -> {
+                    robot.arm.setRotateBack();
+                })
+                .setTangent(Math.toRadians(90))
                 .splineToSplineHeading(new Pose2d(24, 0, Math.toRadians(-45)), Math.toRadians(135))
-                .setTangent(Math.toRadians(-45))
-                .splineToSplineHeading(new Pose2d(63, -12, Math.toRadians(0)), Math.toRadians(0))
-//                .setTangent(Math.toRadians(180))
-//                .splineToLinearHeading(new Pose2d(24, 0, Math.toRadians(-45)), Math.toRadians(135))
-//                .setTangent(Math.toRadians(-45))
-//                .splineToLinearHeading(new Pose2d(63, -12, Math.toRadians(0)), Math.toRadians(0))
-//                .setTangent(Math.toRadians(180))
-//                .splineToLinearHeading(new Pose2d(24, 0, Math.toRadians(-90)), Math.toRadians(90))
-//                .setTangent(Math.toRadians(-90))
-//                .splineToLinearHeading(new Pose2d(12, -24, Math.toRadians(-90)),Math.toRadians(-90))
                 .build();
+
+        TrajectorySequence firstPickup = robot.drive.trajectorySequenceBuilder(firstDrop.end())
+                .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(90))
+                .addDisplacementMarker(() -> {
+                    robot.arm.setRotateBack();
+                })
+                .setTangent(Math.toRadians(90))
+                .splineToSplineHeading(new Pose2d(24, 0, Math.toRadians(-45)), Math.toRadians(135))
+                .build();
+
 
         while (!isStarted() && !isStopRequested()){
             //sleeveVal = aprilTagDetector.updateAprilTagDetections();
@@ -49,7 +52,12 @@ public class AutonTest extends LinearOpMode {
             telemetry.update();
         }
 
-        robot.drive.followTrajectorySequence(test);
+        robot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.HIGH);
+        robot.drive.followTrajectorySequence(firstDrop);
+
+        robot.arm.setGrabberOpen();
+        sleep(500);
+
 
         switch (sleeveVal){
             case 0:
