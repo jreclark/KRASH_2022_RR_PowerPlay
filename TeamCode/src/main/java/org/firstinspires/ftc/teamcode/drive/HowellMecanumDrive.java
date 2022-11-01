@@ -67,7 +67,7 @@ public class HowellMecanumDrive extends MecanumDrive {
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
 
-    public Localizer localizer;
+    //public Localizer localizer;
 
     private TrajectorySequenceRunner trajectorySequenceRunner;
 
@@ -86,7 +86,7 @@ public class HowellMecanumDrive extends MecanumDrive {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
         this.telemetry = telemetry;
 
-        this.localizer = new StandardTrackingWheelLocalizer(hardwareMap);
+        //this.localizer = new StandardTrackingWheelLocalizer(hardwareMap);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
@@ -157,7 +157,7 @@ public class HowellMecanumDrive extends MecanumDrive {
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
 
-        setLocalizer(localizer);
+        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }
