@@ -22,12 +22,14 @@ public class Arm {
     private Telemetry telemetry;
 
     private ElapsedTime timer = new ElapsedTime();
+    private ElapsedTime rotateTimer = new ElapsedTime();
     private double m_timeout = 0;
 
     private DcMotorEx elevator;
 
     private Servo grabby;
     private Servo rotate;
+    double ROTATE_DELAY = 1.0;
 
     public static double ROTATE_FRONT = 0.78;
     public static double ROTATE_BACK = 0.1;
@@ -37,13 +39,13 @@ public class Arm {
 
     //Elevator PIDF Values
     public static double KV = 0.1;
-    public static double KP=15;
-    public static double KvP=8;
-    public static double KvD=0;
-    public static double KvI=2.5;
+    public static double KP = 15;
+    public static double KvP = 8;
+    public static double KvD = 0;
+    public static double KvI = 2.5;
 
     //Elevator positions
-    public static enum ElevatorPositions{
+    public static enum ElevatorPositions {
         HIGH(5250),
         MID(3700),
         SHORT(2250),
@@ -55,7 +57,7 @@ public class Arm {
 
         public final int position;
 
-        private ElevatorPositions(int position){
+        private ElevatorPositions(int position) {
             this.position = position;
         }
     }
@@ -64,10 +66,10 @@ public class Arm {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
-        elevator = hardwareMap.get(DcMotorEx.class,"elevator");
+        elevator = hardwareMap.get(DcMotorEx.class, "elevator");
 
-        grabby = hardwareMap.get(Servo.class,"grabby");
-        rotate = hardwareMap.get(Servo.class,"rotate");
+        grabby = hardwareMap.get(Servo.class, "grabby");
+        rotate = hardwareMap.get(Servo.class, "rotate");
 
         elevator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         elevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -83,10 +85,9 @@ public class Arm {
     }
 
 
-
-    public void groundGrab(){
+    public void groundGrab() {
         elevatorPositionControl(25);
-        if(elevator.getCurrentPosition() < 50){
+        if (elevator.getCurrentPosition() < 50) {
             setGrabberClosed();
         } else {
             setGrabberOpen();
@@ -102,69 +103,81 @@ public class Arm {
         rotate.setPosition(ROTATE_FRONT);
     }
 
-    public void setGrabberOpen(){
+    public void setGrabberOpen() {
         grabby.setPosition(GRABBY_OPEN);
     }
 
-    public void setGrabberClosed(){
+    public void setGrabberClosed() {
         grabby.setPosition(GRABBY_CLOSE);
     }
 
-    public void setRotateFront(){
+    public void setRotateFront() {
+        if (rotate.getPosition() != ROTATE_FRONT) {
+            rotateTimer.reset();
+        }
         rotate.setPosition(ROTATE_FRONT);
     }
 
-    public void setRotateBack(){
+    public void setRotateBack() {
+        if (rotate.getPosition() != ROTATE_BACK) {
+            rotateTimer.reset();
+        }
         rotate.setPosition(ROTATE_BACK);
     }
 
-    public boolean isRotateFront(){
+    public boolean isRotateFront() {
         double pos = rotate.getPosition();
-        if(pos >= ROTATE_FRONT - 0.1 && pos <= ROTATE_FRONT + 0.1){
+        if (pos == ROTATE_FRONT && rotateTimer.seconds() >= ROTATE_DELAY) {
             return true;
-        } else {return false;}
+        } else {
+            return false;
+        }
     }
 
-    public boolean isRotateBack(){
+    public boolean isRotateBack() {
         double pos = rotate.getPosition();
-        if(pos >= ROTATE_BACK - 0.1 && pos <= ROTATE_BACK + 0.1){
+        if (pos == ROTATE_BACK && rotateTimer.seconds() >= ROTATE_DELAY) {
             return true;
-        } else {return false;}
+        } else {
+            return false;
+        }
     }
 
     /***********************************
      * ELEVATOR METHODS
      ***********************************/
 
-    public void runElevator(double power){
+    public void runElevator(double power) {
         int pos = elevator.getCurrentPosition();
 
-        if(power > 0 && pos > .9 * ElevatorPositions.HIGH.position){
+        if (power > 0 && pos > .8 * ElevatorPositions.HIGH.position) {
             power = power * 0.5;
-        } else if (power < 0 && pos < 300 && pos > 0){
-            power = power * 0.5;
-        } else if (power < 0 && pos <= 0){
+        } else if (power > 0 && pos >= ElevatorPositions.HIGH.position) {
+            power = 0;
+        } else if (power < 0 && pos < 800 && pos > 0) {
+            power = power * 0.25;
+        } else if (power < 0 && pos <= 0) {
             power = 0;
         }
         elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         elevator.setPower(power);
     }
 
-    public void elevatorPositionControl(int position){
+    public void elevatorPositionControl(int position) {
         elevator.setTargetPosition(position);
         elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         elevator.setPower(1.0);
     }
 
-    public void elevatorPositionByConstant(ElevatorPositions constant){
+    public void elevatorPositionByConstant(ElevatorPositions constant) {
         elevatorPositionControl(constant.position);
     }
 
-    public void holdElevator(){
+    public void holdElevator() {
         elevatorPositionControl(elevator.getCurrentPosition());
     }
 
-    public int getElevatorPosition(){
+    public int getElevatorPosition() {
         return elevator.getCurrentPosition();
     }
 
@@ -172,31 +185,31 @@ public class Arm {
         return elevator.isBusy();
     }
 
-    public double getElevatorPower(){
+    public double getElevatorPower() {
         return elevator.getPower();
     }
 
-    public double getElevatorCurrent(){
+    public double getElevatorCurrent() {
         return elevator.getCurrent(CurrentUnit.AMPS);
     }
 
     public boolean isSafeToRotate() {
-        if (elevator.getCurrentPosition() > 0.96*ElevatorPositions.PIVOT_POINT.position) {
+        if (elevator.getCurrentPosition() > 0.96 * ElevatorPositions.PIVOT_POINT.position) {
             return true;
         } else {
             return false;
         }
     }
 
-    public void telemetryPIDF(){
+    public void telemetryPIDF() {
         telemetry.addData("KP", KP);
         telemetry.addData("KvP", KvP);
         telemetry.addData("KvI", KvI);
         telemetry.addData("KvD", KvD);
     }
 
-    public void setPIDFValues(){
-        elevator.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(KP, 0,0,0));
+    public void setPIDFValues() {
+        elevator.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(KP, 0, 0, 0));
         elevator.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(KvP, KvI, KvD, KV));
     }
 

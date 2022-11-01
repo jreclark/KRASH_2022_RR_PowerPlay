@@ -53,6 +53,7 @@ public class BasicDriving extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+    private ElapsedTime timer = new ElapsedTime();
     private Robot myRobot;
     private double scaleFactor = 1;
 
