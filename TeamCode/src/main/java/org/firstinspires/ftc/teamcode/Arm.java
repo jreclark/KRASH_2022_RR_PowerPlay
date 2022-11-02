@@ -29,7 +29,7 @@ public class Arm {
     private ElapsedTime rotateTimer = new ElapsedTime();
     private ElapsedTime autoGrabTimer = new ElapsedTime();
     private double m_timeout = 0;
-    private double autoGrabTimeout = 1.0;
+    private double autoGrabTimeout = 1.5;
 
 
     private DcMotorEx elevator;
@@ -45,7 +45,7 @@ public class Arm {
     public static double ROTATE_BACK = 0.1;
 
     public static double GRABBY_OPEN = 0.0;
-    public static double GRABBY_CLOSE = 0.7;
+    public static double GRABBY_CLOSE = 1.0;
 
     //Elevator PIDF Values
     public static double KV = 0.1;
@@ -61,7 +61,8 @@ public class Arm {
         SHORT(2250),
         LOW(300),
         PIVOT_POINT(2250),
-        START_AUTO_GRAB(800),
+        START_AUTO_GRAB(1560),
+        FIRST_AUTO_GRAB(950),
         START_GROUND_GRAB(700),
         DELTA_DROP(500);
 
@@ -107,18 +108,18 @@ public class Arm {
         }
     }
 
-    public void stackGrab(){
 
+    public void stackFirstGrab(){
         setGrabberOpen();
-        runElevator(-0.2);
+        elevatorPositionByConstant(ElevatorPositions.FIRST_AUTO_GRAB);
         autoGrabTimer.reset();
 
-        while(!coneSensor.getState() && autoGrabTimer.seconds() <= autoGrabTimeout){
+        while(autoGrabTimer.seconds() <= autoGrabTimeout){
 
         }
-        runElevator(0.1);
-        setGrabberOpen();
-        Utils.sleep(1000);
+        setGrabberClosed();
+        Utils.sleep(1500);
+        elevatorPositionByConstant(ElevatorPositions.HIGH);
     }
 
     /***********************************

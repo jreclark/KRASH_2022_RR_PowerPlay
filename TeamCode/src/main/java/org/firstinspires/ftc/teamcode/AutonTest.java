@@ -23,26 +23,24 @@ public class AutonTest extends LinearOpMode {
         //aprilTagDetector = new AprilTagDetector(hardwareMap, telemetry);
         //aprilTagDetector.init();
 
-        Pose2d startPose = new Pose2d(34, -63, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(40.5, -64, Math.toRadians(90));
 
         robot.drive.setPoseEstimate(startPose);
 
         TrajectorySequence firstDrop = robot.drive.trajectorySequenceBuilder(startPose)
-                .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(90))
-                .addDisplacementMarker(() -> {
-                    robot.arm.setRotateBack();
-                })
+                .setTangent(Math.toRadians(145.0))
+                .splineToSplineHeading(new Pose2d(36, -20, Math.toRadians(-90)), Math.toRadians(90))
                 .setTangent(Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(24, 0, Math.toRadians(-45)), Math.toRadians(135))
+                .splineToSplineHeading(new Pose2d(28.5, -4.5, Math.toRadians(-45)), Math.toRadians(135))
                 .build();
 
         TrajectorySequence firstPickup = robot.drive.trajectorySequenceBuilder(firstDrop.end())
-                .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(90))
-                .addDisplacementMarker(() -> {
-                    robot.arm.setRotateBack();
-                })
-                .setTangent(Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(24, 0, Math.toRadians(-45)), Math.toRadians(135))
+                .setTangent(Math.toRadians(-45))
+                .splineToLinearHeading(new Pose2d(62, -14, Math.toRadians(0)), Math.toRadians(0))
+                .build();
+
+        TrajectorySequence backup = robot.drive.trajectorySequenceBuilder(firstPickup.end())
+                .back(24)
                 .build();
 
 
@@ -53,10 +51,37 @@ public class AutonTest extends LinearOpMode {
         }
 
         robot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.HIGH);
-        robot.drive.followTrajectorySequence(firstDrop);
+        robot.drive.followTrajectorySequenceAsync(firstDrop);
+        while(robot.drive.isBusy()){
+            if(robot.arm.isSafeToRotate()){
+                robot.arm.setRotateBack();
+            }
+            robot.drive.update();
+        }
 
         robot.arm.setGrabberOpen();
         sleep(500);
+
+        robot.drive.followTrajectorySequenceAsync(firstPickup);
+
+        while (robot.drive.isBusy()){
+            if(robot.arm.isRotateFront()){
+                robot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.START_AUTO_GRAB);
+            } else if(robot.arm.isSafeToRotate()){
+                robot.arm.setRotateFront();
+            } else {
+                robot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.PIVOT_POINT);
+            }
+            robot.drive.update();
+        }
+
+        robot.arm.stackFirstGrab();
+
+        robot.drive.followTrajectorySequence(backup);
+
+        sleep(5);
+
+
 
 
         switch (sleeveVal){

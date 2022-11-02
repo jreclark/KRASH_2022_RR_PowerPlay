@@ -122,12 +122,21 @@ public class BasicDriving extends LinearOpMode {
 
             if (gamepad2.dpad_up) {
                 myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.HIGH);
+                if(myRobot.arm.isSafeToRotate()){
+                    myRobot.arm.setRotateBack();
+                }
                 elevatorManualOp = false;
             } else if (gamepad2.dpad_right) {
                 myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.MID);
+                if(myRobot.arm.isSafeToRotate()){
+                    myRobot.arm.setRotateBack();
+                }
                 elevatorManualOp = false;
             } else if (gamepad2.dpad_down) {
                 myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.SHORT);
+                if(myRobot.arm.isSafeToRotate()){
+                    myRobot.arm.setRotateBack();
+                }
                 elevatorManualOp = false;
             } else if (gamepad2.dpad_left){
                 myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.LOW);
@@ -141,7 +150,7 @@ public class BasicDriving extends LinearOpMode {
                 }
             }
 
-            if(gamepad2.right_trigger>0.85){
+            if(gamepad2.right_trigger>0.85 && myRobot.arm.isRotateFront()){
                 myRobot.arm.groundGrab();
             } else if(gamepad2.right_trigger > 0.1){
                 myRobot.arm.setGrabberClosed();
