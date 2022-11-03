@@ -66,7 +66,7 @@ public class BasicDriving extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        myRobot = new Robot(hardwareMap, telemetry);
+        myRobot = new Robot(hardwareMap, telemetry, true);
 
 
         double drive;
@@ -91,14 +91,14 @@ public class BasicDriving extends LinearOpMode {
             /***************************************************************
              * Driver Controls
              ***************************************************************/
-            drive = -gamepad1.left_stick_y;
-            turn  =  gamepad1.right_stick_x;
-            strafe = gamepad1.left_stick_x;
+            drive = -Math.pow(-gamepad1.left_stick_y, 3);
+            turn  =  Math.pow(gamepad1.right_stick_x, 3);
+            strafe = -Math.pow(gamepad1.left_stick_x, 3);
 
             if(gamepad1.left_bumper){
                 driveScaleFactor = SLOW_SCALE_FACTOR;
             } else if(gamepad1.right_bumper){
-                driveScaleFactor = 1;
+                driveScaleFactor = 0.8;
             }
 
             myRobot.drive.teleDrive(drive, turn, strafe, driveScaleFactor);

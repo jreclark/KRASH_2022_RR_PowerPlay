@@ -19,7 +19,7 @@ public class AutonWithVisionFramework extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(hardwareMap, telemetry);
+        robot = new Robot(hardwareMap, telemetry, false);
         aprilTagDetector = new AprilTagDetector(hardwareMap, telemetry);
         aprilTagDetector.init();
 

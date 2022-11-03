@@ -73,7 +73,7 @@ public class Arm {
         }
     }
 
-    public Arm(HardwareMap hardwareMap, Telemetry telemetry) {
+    public Arm(HardwareMap hardwareMap, Telemetry telemetry, boolean isTele) {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
@@ -86,7 +86,7 @@ public class Arm {
         rotate = hardwareMap.get(Servo.class, "rotate");
 
         elevator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        elevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        if(!isTele) elevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         elevator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         setPIDFValues();
@@ -120,6 +120,7 @@ public class Arm {
         setGrabberClosed();
         Utils.sleep(1500);
         elevatorPositionByConstant(ElevatorPositions.HIGH);
+        Utils.sleep(1000);
     }
 
     /***********************************
