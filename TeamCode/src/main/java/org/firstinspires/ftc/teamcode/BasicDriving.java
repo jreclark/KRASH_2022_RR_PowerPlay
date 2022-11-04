@@ -58,8 +58,8 @@ public class BasicDriving extends LinearOpMode {
     private double scaleFactor = 1;
 
     private boolean slowMode = false;
-    private double SLOW_SCALE_FACTOR = 0.5;
-    private double driveScaleFactor = 1;
+    private double SLOW_SCALE_FACTOR = 0.6;
+    private double driveScaleFactor = 0.5;
 
     private boolean elevatorInHold = true;
     private boolean elevatorManualOp = false;
@@ -95,9 +95,9 @@ public class BasicDriving extends LinearOpMode {
             turn  =  Math.pow(gamepad1.right_stick_x, 3);
             strafe = -Math.pow(gamepad1.left_stick_x, 3);
 
-            if(gamepad1.left_bumper){
+            if(gamepad1.left_trigger > 0.1){
                 driveScaleFactor = SLOW_SCALE_FACTOR;
-            } else if(gamepad1.right_bumper){
+            } else if(gamepad1.right_trigger > 0.1){
                 driveScaleFactor = 0.8;
             }
 

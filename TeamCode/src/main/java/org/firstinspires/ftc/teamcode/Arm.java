@@ -63,6 +63,7 @@ public class Arm {
         PIVOT_POINT(2250),
         START_AUTO_GRAB(1560),
         FIRST_AUTO_GRAB(950),
+        SECOND_AUTO_GRAB(760),
         START_GROUND_GRAB(700),
         DELTA_DROP(500);
 
@@ -112,6 +113,20 @@ public class Arm {
     public void stackFirstGrab(){
         setGrabberOpen();
         elevatorPositionByConstant(ElevatorPositions.FIRST_AUTO_GRAB);
+        autoGrabTimer.reset();
+
+        while(autoGrabTimer.seconds() <= autoGrabTimeout){
+
+        }
+        setGrabberClosed();
+        Utils.sleep(1500);
+        elevatorPositionByConstant(ElevatorPositions.HIGH);
+        Utils.sleep(1000);
+    }
+
+    public void stackSecondGrab(){
+        setGrabberOpen();
+        elevatorPositionByConstant(ElevatorPositions.SECOND_AUTO_GRAB);
         autoGrabTimer.reset();
 
         while(autoGrabTimer.seconds() <= autoGrabTimeout){
