@@ -71,9 +71,9 @@ public class MeepMeepTesting {
                                 .splineToLinearHeading(new Pose2d(-24, -12, Math.toRadians(180)), Math.toRadians(180))
                                 .lineToConstantHeading(new Vector2d(-63, -12))
                                 //Drop Second
-                                .setTangent(0)
-                                .lineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(180)))
-                                .splineToSplineHeading(new Pose2d(-4, -22, Math.toRadians(135)), Math.toRadians(-45))
+                                .setTangent(Math.toRadians(180))
+                                .splineToSplineHeading(new Pose2d(45, -14, Math.toRadians(0)), Math.toRadians(180))
+                                .splineToLinearHeading(new Pose2d(27.5, -5, Math.toRadians(-45)), Math.toRadians(135))
                                 .build()
                 );
 

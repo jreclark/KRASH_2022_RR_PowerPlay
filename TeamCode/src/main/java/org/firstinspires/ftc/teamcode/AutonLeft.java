@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.AprilTags.AprilTagDetector;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "Auto Left", group = "Comp", preselectTeleOp = "BasicDriving")
+@Autonomous(name = "Auto Left", group = "Comp", preselectTeleOp = "KRASH TeleOp")
 //@Disabled
 public class AutonLeft extends LinearOpMode {
 
@@ -174,7 +174,7 @@ public class AutonLeft extends LinearOpMode {
             robot.arm.stackSecondGrab();
             robot.arm.setRotateBack();
             sleep(1000);
-            robot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.LOW);
+            robot.arm.elevatorPositionControl(20);
         }
 
 

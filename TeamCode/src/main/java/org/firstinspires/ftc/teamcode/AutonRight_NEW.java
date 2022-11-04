@@ -1,14 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_VEL;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.TRACK_WIDTH;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.AprilTags.AprilTagDetector;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "Auto Right- NEW!", group = "Comp", preselectTeleOp = "BasicDriving")
+@Autonomous(name = "Auto Right- NEW!", group = "Comp", preselectTeleOp = "KRASH TeleOp")
 //@Disabled
 public class AutonRight_NEW extends LinearOpMode {
 
@@ -28,26 +32,32 @@ public class AutonRight_NEW extends LinearOpMode {
 
         robot.drive.setPoseEstimate(startPose);
 
+        TrajectoryVelocityConstraint slowSpeed = robot.drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH);
+
         TrajectorySequence firstDrop = robot.drive.trajectorySequenceBuilder(startPose)
+                .setVelConstraint(slowSpeed)
                 .setTangent(Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(13, -54), Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(18, -4, Math.toRadians(45)), Math.toRadians(45))
+                .splineToConstantHeading(new Vector2d(14, -54), Math.toRadians(90))
+                .splineToSplineHeading(new Pose2d(19.5, -7, Math.toRadians(45)), Math.toRadians(45))
                 .build();
 
         TrajectorySequence firstPickup = robot.drive.trajectorySequenceBuilder(firstDrop.end())
-                .back(12)
+                .setTangent(-135)
+                .lineToLinearHeading(new Pose2d(8, -15, Math.toRadians(0)))
                 .setTangent(0)
-                .splineToLinearHeading(new Pose2d(62, -14, Math.toRadians(0)), Math.toRadians(0))
+                .lineToLinearHeading(new Pose2d(62, -15, Math.toRadians(0)))
                 .build();
 
         TrajectorySequence secondDrop = robot.drive.trajectorySequenceBuilder(firstPickup.end())
+                .setVelConstraint(slowSpeed)
                 .setTangent(Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(28.5, -4.5, Math.toRadians(-45)), Math.toRadians(135))
+                .splineToSplineHeading(new Pose2d(45, -16, Math.toRadians(0)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(29, -6, Math.toRadians(-45)), Math.toRadians(135))
                 .build();
 
         TrajectorySequence parkRight = robot.drive.trajectorySequenceBuilder(secondDrop.end())
                 .setTangent(Math.toRadians(-45))
-                .splineToLinearHeading(new Pose2d(62, -14, Math.toRadians(0)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(62, -16, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
         TrajectorySequence parkMiddle = robot.drive.trajectorySequenceBuilder(secondDrop.end())
@@ -78,13 +88,13 @@ public class AutonRight_NEW extends LinearOpMode {
         robot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.HIGH);
         robot.drive.followTrajectorySequenceAsync(firstDrop);
         while(robot.drive.isBusy()){
-            if(robot.arm.isSafeToRotate()){
-                robot.arm.setRotateBack();
-            }
+
             robot.drive.update();
         }
 
         robot.arm.setGrabberOpen();
+        sleep(500);
+        robot.arm.setRotateBack();
         sleep(500);
 
         robot.drive.followTrajectorySequenceAsync(firstPickup);
@@ -161,7 +171,8 @@ public class AutonRight_NEW extends LinearOpMode {
             robot.arm.stackSecondGrab();
             robot.arm.setRotateBack();
             sleep(1000);
-            robot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.LOW);
+            robot.arm.elevatorPositionControl(20);
+            sleep(2000);
         }
 
 

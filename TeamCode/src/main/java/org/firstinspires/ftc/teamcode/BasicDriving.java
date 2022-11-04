@@ -181,6 +181,10 @@ public class BasicDriving extends LinearOpMode {
 
         }
 
+        myRobot.drive.setMotorPowers(0,0,0,0);
+
     }
+
+
 
 }
