@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.AprilTags.AprilTagDetector;
 import org.firstinspires.ftc.teamcode.drive.DriveByEncoders;
 
 @Autonomous
-//@Disabled
+@Disabled
 public class AutonWithVisionFramework extends LinearOpMode {
 
     public Robot robot;
