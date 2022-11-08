@@ -148,9 +148,17 @@ public class BasicDriving extends LinearOpMode {
                 } else {
                     myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.PIVOT_POINT);
                 }
+            } else if (gamepad2.x) {
+                if(myRobot.arm.isRotateFront()){
+                    myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.FIRST_AUTO_GRAB);
+                } else if(myRobot.arm.isSafeToRotate()){
+                    myRobot.arm.setRotateFront();
+                } else {
+                    myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.PIVOT_POINT);
+                }
             }
 
-            if(gamepad2.right_trigger>0.85 && myRobot.arm.isRotateFront()){
+            if(gamepad2.right_trigger>0.9 && myRobot.arm.isRotateFront()){
                 myRobot.arm.groundGrab();
             } else if(gamepad2.right_trigger > 0.1){
                 myRobot.arm.setGrabberClosed();

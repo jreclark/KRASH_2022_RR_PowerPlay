@@ -42,6 +42,7 @@ public class AutonRight_NEW extends LinearOpMode {
                 .build();
 
         TrajectorySequence firstPickup = robot.drive.trajectorySequenceBuilder(firstDrop.end())
+                .setVelConstraint(slowSpeed)
                 .setTangent(-135)
                 .lineToLinearHeading(new Pose2d(8, -15, Math.toRadians(0)))
                 .setTangent(0)
@@ -57,7 +58,7 @@ public class AutonRight_NEW extends LinearOpMode {
 
         TrajectorySequence parkRight = robot.drive.trajectorySequenceBuilder(secondDrop.end())
                 .setTangent(Math.toRadians(-45))
-                .splineToLinearHeading(new Pose2d(62, -16, Math.toRadians(0)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(62, -15, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
         TrajectorySequence parkMiddle = robot.drive.trajectorySequenceBuilder(secondDrop.end())

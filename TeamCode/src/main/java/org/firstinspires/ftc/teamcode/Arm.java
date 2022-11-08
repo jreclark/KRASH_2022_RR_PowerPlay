@@ -29,7 +29,7 @@ public class Arm {
     private ElapsedTime rotateTimer = new ElapsedTime();
     private ElapsedTime autoGrabTimer = new ElapsedTime();
     private double m_timeout = 0;
-    private double autoGrabTimeout = 1.5;
+    private double autoGrabTimeout = 1.25;
 
 
     private DcMotorEx elevator;
@@ -56,16 +56,16 @@ public class Arm {
 
     //Elevator positions
     public static enum ElevatorPositions {
-        HIGH(5250),
-        MID(3700),
-        SHORT(2250),
-        LOW(300),
-        PIVOT_POINT(2250),
-        START_AUTO_GRAB(1560),
-        FIRST_AUTO_GRAB(950),
-        SECOND_AUTO_GRAB(760),
-        START_GROUND_GRAB(700),
-        DELTA_DROP(500);
+        HIGH(3747),//5250
+        MID(2750),//3700
+        SHORT(1600),//2250
+        LOW(214),//300
+        PIVOT_POINT(1600),//2250
+        START_AUTO_GRAB(1113),//1560
+        FIRST_AUTO_GRAB(680),//950
+        SECOND_AUTO_GRAB(540),//760
+        START_GROUND_GRAB(500),//700
+        DELTA_DROP(360);//500
 
         public final int position;
 
@@ -119,7 +119,7 @@ public class Arm {
 
         }
         setGrabberClosed();
-        Utils.sleep(1500);
+        Utils.sleep(2000);
         elevatorPositionByConstant(ElevatorPositions.HIGH);
         Utils.sleep(1000);
     }
@@ -133,8 +133,8 @@ public class Arm {
 
         }
         setGrabberClosed();
-        Utils.sleep(1500);
-        elevatorPositionByConstant(ElevatorPositions.HIGH);
+        Utils.sleep(2000);
+        elevatorPositionByConstant(ElevatorPositions.PIVOT_POINT);
         Utils.sleep(1000);
     }
 

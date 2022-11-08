@@ -36,15 +36,17 @@ public class AutonLeft extends LinearOpMode {
         robot.drive.setPoseEstimate(startPose);
 
         TrajectoryVelocityConstraint slowSpeed = robot.drive.getVelocityConstraint(25, MAX_ANG_VEL, TRACK_WIDTH);
+        TrajectoryVelocityConstraint slowishSpeed = robot.drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH);
 
         TrajectorySequence firstDrop = robot.drive.trajectorySequenceBuilder(startPose)
                 .setVelConstraint(slowSpeed)
                 .setTangent(Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(-13.5, -54.5), Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(-4, -28, Math.toRadians(45)), Math.toRadians(45))
+                .splineToSplineHeading(new Pose2d(-5, -29, Math.toRadians(45)), Math.toRadians(45))
                 .build();
 
         TrajectorySequence firstPickup = robot.drive.trajectorySequenceBuilder(firstDrop.end())
+                .setVelConstraint(slowishSpeed)
                 .back(15)
                 .setTangent(45)
                 .splineToLinearHeading(new Pose2d(-24, -12, Math.toRadians(180)), Math.toRadians(180))
@@ -52,6 +54,7 @@ public class AutonLeft extends LinearOpMode {
                 .build();
 
         TrajectorySequence secondDrop = robot.drive.trajectorySequenceBuilder(firstPickup.end())
+                .setVelConstraint(slowishSpeed)
                 .setTangent(0)
                 .lineToSplineHeading(new Pose2d(-48, -10, Math.toRadians(180)))
                 .splineToSplineHeading(new Pose2d(-5, -22, Math.toRadians(135)), Math.toRadians(-45))
@@ -70,6 +73,7 @@ public class AutonLeft extends LinearOpMode {
                 .build();
 
         TrajectorySequence parkLeft = robot.drive.trajectorySequenceBuilder(secondDrop.end())
+                .setVelConstraint(slowishSpeed)
                 .setTangent(135)
                 .splineToLinearHeading(new Pose2d(-24, -12, Math.toRadians(180)), Math.toRadians(180))
                 .lineToConstantHeading(new Vector2d(-63, -10))
