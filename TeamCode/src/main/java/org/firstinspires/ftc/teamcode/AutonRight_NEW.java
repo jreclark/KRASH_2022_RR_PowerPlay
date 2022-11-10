@@ -129,9 +129,6 @@ public class AutonRight_NEW extends LinearOpMode {
 
         switch (sleeveVal){
             case 0:
-                // Insert code for when no tag is detected.  If you want this to default to one of the other cases,
-                // put this case block before that case and leave it blank.  For example, want to run case #1,
-                // leave this block of code where it is.
                 park = parkMiddle;
                 break;
             case 1:

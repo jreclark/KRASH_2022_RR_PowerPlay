@@ -33,21 +33,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.util.Utils;
-
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When a selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
- *
- *
+ * <p>
+ * <p>
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="KRASH TeleOp", group="Comp")
+@TeleOp(name = "KRASH TeleOp", group = "Comp")
 //@Disabled
 public class BasicDriving extends LinearOpMode {
 
@@ -57,12 +55,15 @@ public class BasicDriving extends LinearOpMode {
     private Robot myRobot;
     private double scaleFactor = 1;
 
+
     private boolean slowMode = false;
     private double SLOW_SCALE_FACTOR = 0.6;
     private double driveScaleFactor = 0.5;
 
     private boolean elevatorInHold = true;
     private boolean elevatorManualOp = false;
+    private boolean x_held = false;
+
 
     @Override
     public void runOpMode() {
@@ -92,12 +93,12 @@ public class BasicDriving extends LinearOpMode {
              * Driver Controls
              ***************************************************************/
             drive = -Math.pow(-gamepad1.left_stick_y, 3);
-            turn  =  Math.pow(gamepad1.right_stick_x, 3);
+            turn = Math.pow(gamepad1.right_stick_x, 3);
             strafe = -Math.pow(gamepad1.left_stick_x, 3);
 
-            if(gamepad1.left_trigger > 0.1){
+            if (gamepad1.left_trigger > 0.1) {
                 driveScaleFactor = SLOW_SCALE_FACTOR;
-            } else if(gamepad1.right_trigger > 0.1){
+            } else if (gamepad1.right_trigger > 0.1) {
                 driveScaleFactor = 0.8;
             }
 
@@ -122,53 +123,82 @@ public class BasicDriving extends LinearOpMode {
 
             if (gamepad2.dpad_up) {
                 myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.HIGH);
-                if(myRobot.arm.isSafeToRotate()){
+                if (myRobot.arm.isSafeToRotate()) {
                     myRobot.arm.setRotateBack();
                 }
                 elevatorManualOp = false;
             } else if (gamepad2.dpad_right) {
                 myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.MID);
-                if(myRobot.arm.isSafeToRotate()){
+                if (myRobot.arm.isSafeToRotate()) {
                     myRobot.arm.setRotateBack();
                 }
                 elevatorManualOp = false;
             } else if (gamepad2.dpad_down) {
                 myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.SHORT);
-                if(myRobot.arm.isSafeToRotate()){
+                if (myRobot.arm.isSafeToRotate()) {
                     myRobot.arm.setRotateBack();
                 }
                 elevatorManualOp = false;
-            } else if (gamepad2.dpad_left){
+            } else if (gamepad2.dpad_left) {
                 myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.LOW);
+                elevatorManualOp = false;
             } else if (gamepad2.a) {
-                if(myRobot.arm.isRotateFront()){
-                    myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.START_GROUND_GRAB);
-                } else if(myRobot.arm.isSafeToRotate()){
+                if (myRobot.arm.isRotateFront()) {
+                    myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.START_AUTO_GRAB);
+                    myRobot.arm.setGrabberOpen();
+                } else if (myRobot.arm.isSafeToRotate()) {
                     myRobot.arm.setRotateFront();
                 } else {
                     myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.PIVOT_POINT);
                 }
             } else if (gamepad2.x) {
-                if(myRobot.arm.isRotateFront()){
-                    myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.FIRST_AUTO_GRAB);
-                } else if(myRobot.arm.isSafeToRotate()){
-                    myRobot.arm.setRotateFront();
-                } else {
-                    myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.PIVOT_POINT);
-                }
+                elevatorManualOp = false;
+                    if (!myRobot.arm.getStackGrabRunning() && !x_held) {
+                        x_held = true;
+                        myRobot.arm.startAutoStackGrab();
+                    } else if (myRobot.arm.autoGrabIsBusy()) {
+
+                    } else {
+                        myRobot.arm.autoGrabFinish();
+                    }
+            } else {
+                x_held = false;
             }
 
-            if(gamepad2.right_trigger>0.9 && myRobot.arm.isRotateFront()){
+
+            /************************************************************
+             *  This block is the stack control code from the first comp.
+             *  It should be uncommented after the dpad_left section.
+             ************************************************************/
+//            else if (gamepad2.a) {
+//                if(myRobot.arm.isRotateFront()){
+//                    myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.START_GROUND_GRAB);
+//                } else if(myRobot.arm.isSafeToRotate()){
+//                    myRobot.arm.setRotateFront();
+//                } else {
+//                    myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.PIVOT_POINT);
+//                }
+//            } else if (gamepad2.x) {
+//                if(myRobot.arm.isRotateFront()){
+//                    myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.FIRST_AUTO_GRAB);
+//                } else if(myRobot.arm.isSafeToRotate()){
+//                    myRobot.arm.setRotateFront();
+//                } else {
+//                    myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.PIVOT_POINT);
+//                }
+//            }
+
+            if (gamepad2.right_trigger > 0.9 && myRobot.arm.isRotateFront()) {
                 myRobot.arm.groundGrab();
-            } else if(gamepad2.right_trigger > 0.1){
+            } else if (gamepad2.right_trigger > 0.1) {
                 myRobot.arm.setGrabberClosed();
-            } else if(gamepad2.left_trigger > 0.1){
+            } else if (gamepad2.left_trigger > 0.1) {
                 myRobot.arm.setGrabberOpen();
             }
 
-            if(gamepad2.right_bumper && myRobot.arm.isSafeToRotate()){
+            if (gamepad2.right_bumper && myRobot.arm.isSafeToRotate()) {
                 myRobot.arm.setRotateFront();
-            } else if(gamepad2.left_bumper && myRobot.arm.isSafeToRotate()){
+            } else if (gamepad2.left_bumper && myRobot.arm.isSafeToRotate()) {
                 myRobot.arm.setRotateBack();
             }
 
@@ -184,15 +214,14 @@ public class BasicDriving extends LinearOpMode {
             telemetry.addData("Elevator Position", myRobot.arm.getElevatorPosition());
             telemetry.addData("Elevator in hold", elevatorInHold);
             telemetry.addData("Elevator busy", myRobot.arm.elevatorIsBusy());
-            //myRobot.arm.telemetryPIDF();
+            telemetry.addData("Cone Switch", myRobot.arm.getConeSwitch());
             telemetry.update();
 
         }
 
-        myRobot.drive.setMotorPowers(0,0,0,0);
+        myRobot.drive.setMotorPowers(0, 0, 0, 0);
 
     }
-
 
 
 }

@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.util.Utils;
@@ -30,6 +29,8 @@ public class Arm {
     private ElapsedTime autoGrabTimer = new ElapsedTime();
     private double m_timeout = 0;
     private double autoGrabTimeout = 1.25;
+    private double stackGrabTimeout = 2;
+    private boolean stackGrabRunning = false;
 
 
     private DcMotorEx elevator;
@@ -136,6 +137,42 @@ public class Arm {
         Utils.sleep(2000);
         elevatorPositionByConstant(ElevatorPositions.PIVOT_POINT);
         Utils.sleep(1000);
+    }
+
+    public void startAutoStackGrab(){
+        autoGrabTimer.reset();
+        stackGrabRunning = true;
+        setGrabberOpen();
+        if(!coneSensor.getState() && getElevatorPosition() >= 0.9 * ElevatorPositions.START_AUTO_GRAB.position){
+            runElevator(-0.1);
+        }
+    }
+
+    public boolean autoGrabIsBusy(){
+        if(!coneSensor.getState() && !autoGrabTimeoutDone() && getElevatorPosition() >= 25){
+            return true;
+        } else {
+            runElevator(0.05);
+            return false;
+        }
+    }
+
+    public boolean autoGrabTimeoutDone(){
+        return autoGrabTimer.seconds() > stackGrabTimeout;
+    }
+
+    public void autoGrabFinish(){
+        setGrabberClosed();
+        Utils.sleep(1000);
+        stackGrabRunning = false;
+    }
+
+    public boolean getStackGrabRunning(){
+        return stackGrabRunning;
+    }
+
+    public boolean getConeSwitch(){
+        return coneSensor.getState();
     }
 
     /***********************************
