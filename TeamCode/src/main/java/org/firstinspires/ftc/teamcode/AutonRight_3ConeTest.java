@@ -59,7 +59,7 @@ public class AutonRight_3ConeTest extends LinearOpMode {
         TrajectorySequence secondPickup = robot.drive.trajectorySequenceBuilder(secondDrop.end())
                 .setVelConstraint(slowSpeed)
                 .setTangent(Math.toRadians(-45))
-                .splineToLinearHeading(new Pose2d(63.5, -12.5, Math.toRadians(0)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(63.5, -13, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
         TrajectorySequence thirdDrop = robot.drive.trajectorySequenceBuilder(secondPickup.end())
