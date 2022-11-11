@@ -125,7 +125,7 @@ public class Arm {
         Utils.sleep(1000);
     }
 
-    public void stackSecondGrab(){
+    public void stackSecondGrabbyandHold(){
         setGrabberOpen();
         elevatorPositionByConstant(ElevatorPositions.SECOND_AUTO_GRAB);
         autoGrabTimer.reset();
@@ -139,12 +139,27 @@ public class Arm {
         Utils.sleep(1000);
     }
 
+    public void stackSecondGrab(){
+        setGrabberOpen();
+        elevatorPositionByConstant(ElevatorPositions.SECOND_AUTO_GRAB);
+        autoGrabTimer.reset();
+
+        while(autoGrabTimer.seconds() <= autoGrabTimeout){
+
+        }
+        setGrabberClosed();
+        Utils.sleep(2000);
+        elevatorPositionByConstant(ElevatorPositions.HIGH);
+        Utils.sleep(1000);
+    }
+
+
     public void startAutoStackGrab(){
         autoGrabTimer.reset();
         stackGrabRunning = true;
         setGrabberOpen();
         if(!coneSensor.getState() && getElevatorPosition() >= 0.9 * ElevatorPositions.START_AUTO_GRAB.position){
-            runElevator(-0.1);
+            runElevator(-0.2);
         }
     }
 

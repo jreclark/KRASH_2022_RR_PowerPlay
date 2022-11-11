@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.AprilTags.AprilTagDetector;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "Auto Right- NEW!", group = "Comp", preselectTeleOp = "KRASH TeleOp")
+@Autonomous(name = "Auto Right - 2 Cones", group = "Comp", preselectTeleOp = "KRASH TeleOp")
 //@Disabled
 public class AutonRight_NEW extends LinearOpMode {
 
@@ -166,7 +166,7 @@ public class AutonRight_NEW extends LinearOpMode {
         }
 
         if (grab){
-            robot.arm.stackSecondGrab();
+            robot.arm.stackSecondGrabbyandHold();
             robot.arm.setRotateBack();
             sleep(1000);
             robot.arm.elevatorPositionControl(20);

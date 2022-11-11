@@ -13,7 +13,7 @@ public class MeepMeepTesting {
 
         Pose2d startPose = new Pose2d(40.5, -63, Math.toRadians(90));
         Pose2d startPose2 = new Pose2d(-31, -63, Math.toRadians(90));
-        Pose2d startPose3 = new Pose2d(31, -63, Math.toRadians(90));
+        Pose2d startPose3 = new Pose2d(31, -64, Math.toRadians(90));
 
         RoadRunnerBotEntity myBotRight = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
@@ -77,13 +77,40 @@ public class MeepMeepTesting {
                                 .build()
                 );
 
+        RoadRunnerBotEntity right3Cone = new DefaultBotBuilder(meepMeep)
+                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                .setConstraints(50, 50, Math.toRadians(180), Math.toRadians(180), 14)
+                .setDimensions(14, 14)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(startPose3)
+                                .setTangent(Math.toRadians(180))
+                                .splineToConstantHeading(new Vector2d(14, -54), Math.toRadians(90))
+                                .splineToSplineHeading(new Pose2d(19.5, -7, Math.toRadians(45)), Math.toRadians(45))
+                                .setTangent(-135)
+                                .lineToLinearHeading(new Pose2d(8, -15, Math.toRadians(0)))
+                                .setTangent(0)
+                                .lineToLinearHeading(new Pose2d(62, -15, Math.toRadians(0)))
+                                //Second Drop
+                                .setTangent(Math.toRadians(180))
+                                .splineToSplineHeading(new Pose2d(45, -16, Math.toRadians(0)), Math.toRadians(180))
+                                .splineToSplineHeading(new Pose2d(29, -6, Math.toRadians(-45)), Math.toRadians(135))
+                                //Second Pickup
+                                .setTangent(Math.toRadians(-45))
+                                .splineToLinearHeading(new Pose2d(62, -15, Math.toRadians(0)), Math.toRadians(0))
+                                //Third Drop
+                                .setTangent(Math.toRadians(180))
+                                .splineToSplineHeading(new Pose2d(45, -16, Math.toRadians(0)), Math.toRadians(180))
+                                .splineToSplineHeading(new Pose2d(29, -6, Math.toRadians(-45)), Math.toRadians(135))
+                                .build()
+                );
+
 
 
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-                .addEntity(myBotRightAlt)
+                .addEntity(right3Cone)
                 .start();
     }
 }

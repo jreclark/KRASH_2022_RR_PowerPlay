@@ -62,7 +62,7 @@ public class BasicDriving extends LinearOpMode {
 
     private boolean elevatorInHold = true;
     private boolean elevatorManualOp = false;
-    private boolean x_held = false;
+    private boolean autoStackButtonHeld = false;
 
 
     @Override
@@ -144,6 +144,14 @@ public class BasicDriving extends LinearOpMode {
                 elevatorManualOp = false;
             } else if (gamepad2.a) {
                 if (myRobot.arm.isRotateFront()) {
+                    myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.START_GROUND_GRAB);
+                } else if (myRobot.arm.isSafeToRotate()) {
+                    myRobot.arm.setRotateFront();
+                } else {
+                    myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.PIVOT_POINT);
+                }
+            } else if (gamepad2.b) {
+                if (myRobot.arm.isRotateFront()) {
                     myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.START_AUTO_GRAB);
                     myRobot.arm.setGrabberOpen();
                 } else if (myRobot.arm.isSafeToRotate()) {
@@ -153,16 +161,16 @@ public class BasicDriving extends LinearOpMode {
                 }
             } else if (gamepad2.x) {
                 elevatorManualOp = false;
-                    if (!myRobot.arm.getStackGrabRunning() && !x_held) {
-                        x_held = true;
-                        myRobot.arm.startAutoStackGrab();
-                    } else if (myRobot.arm.autoGrabIsBusy()) {
+                if (!myRobot.arm.getStackGrabRunning() && !autoStackButtonHeld) {
+                    autoStackButtonHeld = true;
+                    myRobot.arm.startAutoStackGrab();
+                } else if (myRobot.arm.autoGrabIsBusy()) {
 
-                    } else {
-                        myRobot.arm.autoGrabFinish();
-                    }
+                } else {
+                    myRobot.arm.autoGrabFinish();
+                }
             } else {
-                x_held = false;
+                autoStackButtonHeld = false;
             }
 
 

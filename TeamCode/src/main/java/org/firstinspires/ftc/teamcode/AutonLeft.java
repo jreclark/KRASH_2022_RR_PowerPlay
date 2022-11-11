@@ -175,7 +175,7 @@ public class AutonLeft extends LinearOpMode {
         }
 
         if (grab){
-            robot.arm.stackSecondGrab();
+            robot.arm.stackSecondGrabbyandHold();
             robot.arm.setRotateBack();
             sleep(1000);
             robot.arm.elevatorPositionControl(20);
