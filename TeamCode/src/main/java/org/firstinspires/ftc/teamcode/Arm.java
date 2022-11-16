@@ -120,7 +120,7 @@ public class Arm {
 
         }
         setGrabberClosed();
-        Utils.sleep(2000);
+        Utils.sleep(1250);
         elevatorPositionByConstant(ElevatorPositions.HIGH);
         Utils.sleep(1000);
     }
@@ -134,7 +134,7 @@ public class Arm {
 
         }
         setGrabberClosed();
-        Utils.sleep(2000);
+        Utils.sleep(1250);
         elevatorPositionByConstant(ElevatorPositions.PIVOT_POINT);
         Utils.sleep(1000);
     }

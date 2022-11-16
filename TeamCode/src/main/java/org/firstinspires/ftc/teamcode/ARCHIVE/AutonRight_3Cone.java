@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.ARCHIVE;
 
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_VEL;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.TRACK_WIDTH;
@@ -7,14 +7,17 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.AprilTags.AprilTagDetector;
+import org.firstinspires.ftc.teamcode.Arm;
+import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "Auto Right - 3 Cones", group = "Comp", preselectTeleOp = "KRASH TeleOp")
-//@Disabled
-public class AutonRight_3ConeTest extends LinearOpMode {
+@Autonomous(name = "Auto Right- 3 Cone Old", group = "Comp", preselectTeleOp = "KRASH TeleOp")
+@Disabled
+public class AutonRight_3Cone extends LinearOpMode {
 
     public Robot robot;
     public AprilTagDetector aprilTagDetector;
@@ -38,34 +41,34 @@ public class AutonRight_3ConeTest extends LinearOpMode {
                 .setVelConstraint(slowSpeed)
                 .setTangent(Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(14, -54), Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(20, -5, Math.toRadians(45)), Math.toRadians(45))
+                .splineToSplineHeading(new Pose2d(19.5, -7, Math.toRadians(45)), Math.toRadians(45))
                 .build();
 
         TrajectorySequence firstPickup = robot.drive.trajectorySequenceBuilder(firstDrop.end())
                 .setVelConstraint(slowSpeed)
                 .setTangent(-135)
-                .lineToLinearHeading(new Pose2d(8, -13, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(8, -15, Math.toRadians(0)))
                 .setTangent(0)
-                .lineToLinearHeading(new Pose2d(63, -13, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(62, -15, Math.toRadians(0)))
                 .build();
 
         TrajectorySequence secondDrop = robot.drive.trajectorySequenceBuilder(firstPickup.end())
                 .setVelConstraint(slowSpeed)
                 .setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(45, -13, Math.toRadians(0)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(29, -6 , Math.toRadians(-45)), Math.toRadians(135))
+                .splineToSplineHeading(new Pose2d(45, -16, Math.toRadians(0)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(29, -6, Math.toRadians(-45)), Math.toRadians(135))
                 .build();
 
         TrajectorySequence secondPickup = robot.drive.trajectorySequenceBuilder(secondDrop.end())
                 .setVelConstraint(slowSpeed)
                 .setTangent(Math.toRadians(-45))
-                .splineToLinearHeading(new Pose2d(63.5, -13, Math.toRadians(0)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(62.5, -15, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
         TrajectorySequence thirdDrop = robot.drive.trajectorySequenceBuilder(secondPickup.end())
                 .setVelConstraint(slowSpeed)
                 .setTangent(Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(45, -13, Math.toRadians(0)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(45, -16, Math.toRadians(0)), Math.toRadians(180))
                 .splineToSplineHeading(new Pose2d(29, -6, Math.toRadians(-45)), Math.toRadians(135))
                 .build();
 
@@ -76,14 +79,14 @@ public class AutonRight_3ConeTest extends LinearOpMode {
 
         TrajectorySequence parkMiddle = robot.drive.trajectorySequenceBuilder(thirdDrop.end())
                 .setTangent(Math.toRadians(-45))
-                .splineToSplineHeading(new Pose2d(34, -20, Math.toRadians(-90)), Math.toRadians(-90))
+                .splineToSplineHeading(new Pose2d(37, -20, Math.toRadians(-90)), Math.toRadians(-90))
                 .build();
 
         TrajectorySequence parkLeft = robot.drive.trajectorySequenceBuilder(thirdDrop.end())
                 .setTangent(-45)
                 .forward(8)
                 .setTangent(180)
-                .splineToSplineHeading(new Pose2d(11,-12, Math.toRadians(-90)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(12,-12, Math.toRadians(-90)), Math.toRadians(180))
                 .forward(12)
                 .build();
 
