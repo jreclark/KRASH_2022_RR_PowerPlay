@@ -47,9 +47,9 @@ public class AutonLeft_3ConeWIP extends LinearOpMode {
         TrajectorySequence firstPickup = robot.drive.trajectorySequenceBuilder(firstDrop.end())
                 .setVelConstraint(slowSpeed)
                 .setAccelConstraint(slowAccel)
-                .setTangent(-45)
+                .setTangent(Math.toRadians(-45))
                 .lineToLinearHeading(new Pose2d(-8, -14, Math.toRadians(180)))
-                .setTangent(0)
+                .setTangent(Math.toRadians(0))
                 .lineToLinearHeading(new Pose2d(-63.5, -14, Math.toRadians(180)))
                 .build();
 
@@ -72,7 +72,7 @@ public class AutonLeft_3ConeWIP extends LinearOpMode {
                 //.setVelConstraint(slowSpeed)
                 .setAccelConstraint(slowAccel)
                 .setTangent(Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(-45, -13, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-45, -15, Math.toRadians(180)), Math.toRadians(0))
                 .splineToSplineHeading(new Pose2d(-28, -5, Math.toRadians(-135)), Math.toRadians(45))
                 .build();
 
@@ -87,9 +87,9 @@ public class AutonLeft_3ConeWIP extends LinearOpMode {
                 .build();
 
         TrajectorySequence parkRight = robot.drive.trajectorySequenceBuilder(thirdDrop.end())
-                .setTangent(-135)
+                .setTangent(Math.toRadians(-45))
                 .forward(8)
-                .setTangent(0)
+                .setTangent(Math.toRadians(0))
                 .splineToSplineHeading(new Pose2d(-11,-12, Math.toRadians(-90)), Math.toRadians(0))
                 .forward(12)
                 .build();

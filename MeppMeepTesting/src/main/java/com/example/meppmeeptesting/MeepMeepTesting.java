@@ -7,6 +7,8 @@ import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
 
+import java.util.Vector;
+
 public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
@@ -86,10 +88,12 @@ public class MeepMeepTesting {
                                 .setTangent(Math.toRadians(180))
                                 .splineToConstantHeading(new Vector2d(14, -54), Math.toRadians(90))
                                 .splineToSplineHeading(new Pose2d(19.5, -7, Math.toRadians(45)), Math.toRadians(45))
-                                .setTangent(-135)
-                                .lineToLinearHeading(new Pose2d(8, -15, Math.toRadians(0)))
+                                .setTangent(Math.toRadians(-135))
+                                .splineToConstantHeading(new Vector2d(10, -15), Math.toRadians(0))
+                                //.splineToConstantHeading(new Vector2d(8, -15), Math.toRadians(0))
+//                                .lineToLinearHeading(new Pose2d(8, -15, Math.toRadians(0)))
                                 .setTangent(0)
-                                .lineToLinearHeading(new Pose2d(62, -15, Math.toRadians(0)))
+                                .splineToLinearHeading(new Pose2d(62, -15, Math.toRadians(0)), Math.toRadians(0))
                                 //Second Drop
                                 .setTangent(Math.toRadians(180))
                                 .splineToSplineHeading(new Pose2d(45, -16, Math.toRadians(0)), Math.toRadians(180))
