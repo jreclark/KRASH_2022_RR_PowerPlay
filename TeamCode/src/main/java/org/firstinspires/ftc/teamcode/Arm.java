@@ -120,7 +120,7 @@ public class Arm {
 
         }
         setGrabberClosed();
-        Utils.sleep(1250);
+        Utils.sleep(1500);
         elevatorPositionByConstant(ElevatorPositions.HIGH);
         Utils.sleep(1000);
     }
