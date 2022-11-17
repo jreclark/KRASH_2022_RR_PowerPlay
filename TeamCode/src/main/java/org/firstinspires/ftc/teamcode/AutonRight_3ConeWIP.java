@@ -201,13 +201,14 @@ public class AutonRight_3ConeWIP extends LinearOpMode {
         }
 
         robot.drive.followTrajectorySequenceAsync(park);
-        while (robot.drive.isBusy()) {
+        while (robot.drive.isBusy() && !isStopRequested()) {
             if (robot.arm.isSafeToRotate()) {
                 robot.arm.setRotateFront();
             }
             robot.drive.update();
         }
 
+        robot.drive.setMotorPowers(0, 0, 0, 0);
         robot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.START_GROUND_GRAB);
 
 
