@@ -57,14 +57,14 @@ public class Arm {
 
     //Elevator positions
     public static enum ElevatorPositions {
-        HIGH(3747),//5250
+        HIGH(3780),//5250
         MID(2750),//3700
         SHORT(1600),//2250
         LOW(214),//300
         PIVOT_POINT(1600),//2250
         START_AUTO_GRAB(1113),//1560
-        FIRST_AUTO_GRAB(680),//950
-        SECOND_AUTO_GRAB(540),//760
+        FIRST_AUTO_GRAB(630),//950
+        SECOND_AUTO_GRAB(500),//760
         START_GROUND_GRAB(500),//700
         DELTA_DROP(360);//500
 

@@ -8,13 +8,14 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.AprilTags.AprilTagDetector;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "Auto Right - 3 Cones", group = "Comp", preselectTeleOp = "KRASH TeleOp")
-//@Disabled
+@Autonomous(name = "Auto Right - 3 Cones Old", group = "Comp", preselectTeleOp = "KRASH TeleOp")
+@Disabled
 public class AutonRight_3ConeComp extends LinearOpMode {
 
     public Robot robot;

@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.AprilTags.AprilTagDetector;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "Auto Right - 3 WIP", group = "Comp", preselectTeleOp = "KRASH TeleOp")
+@Autonomous(name = "Auto Right - 3 Cones", group = "Comp", preselectTeleOp = "KRASH TeleOp")
 //@Disabled
 public class AutonRight_3ConeWIP extends LinearOpMode {
 
@@ -58,7 +58,7 @@ public class AutonRight_3ConeWIP extends LinearOpMode {
                 .setAccelConstraint(slowAccel)
                 .setTangent(Math.toRadians(180))
                 .splineToSplineHeading(new Pose2d(45, -13, Math.toRadians(0)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(29.5, -4 , Math.toRadians(-45)), Math.toRadians(135))
+                .splineToSplineHeading(new Pose2d(29, -3 , Math.toRadians(-45)), Math.toRadians(135))
                 .build();
 
         TrajectorySequence secondPickup = robot.drive.trajectorySequenceBuilder(secondDrop.end())
@@ -73,7 +73,7 @@ public class AutonRight_3ConeWIP extends LinearOpMode {
                 .setAccelConstraint(slowAccel)
                 .setTangent(Math.toRadians(180))
                 .splineToSplineHeading(new Pose2d(45, -13, Math.toRadians(0)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(29.5, -5, Math.toRadians(-45)), Math.toRadians(135))
+                .splineToSplineHeading(new Pose2d(29, -4, Math.toRadians(-45)), Math.toRadians(135))
                 .build();
 
         TrajectorySequence parkRight = robot.drive.trajectorySequenceBuilder(thirdDrop.end())
