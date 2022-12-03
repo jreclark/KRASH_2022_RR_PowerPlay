@@ -138,7 +138,8 @@ public class AutonRight_3ConeWIP extends LinearOpMode {
         robot.drive.followTrajectorySequenceAsync(secondDrop);
         while(robot.drive.isBusy()){
             if(robot.arm.isSafeToRotate()){
-                robot.arm.setRotateBack();
+                //robot.arm.setRotateBack();
+                robot.arm.rotate.setPosition(0.2);
             }
             robot.drive.update();
         }
@@ -165,7 +166,8 @@ public class AutonRight_3ConeWIP extends LinearOpMode {
         robot.drive.followTrajectorySequenceAsync(thirdDrop);
         while(robot.drive.isBusy()){
             if(robot.arm.isSafeToRotate()){
-                robot.arm.setRotateBack();
+                //robot.arm.setRotateBack();
+                robot.arm.rotate.setPosition(0.2);
             }
             robot.drive.update();
         }

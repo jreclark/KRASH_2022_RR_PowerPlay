@@ -36,14 +36,14 @@ public class Arm {
     private DcMotorEx elevator;
 
     private Servo grabby;
-    private Servo rotate;
+    public Servo rotate;
     double ROTATE_DELAY = 1.0;
 
     private DigitalChannel coneSensor;
 
 
     public static double ROTATE_FRONT = 0.78;
-    public static double ROTATE_BACK = 0.1;
+    public static double ROTATE_BACK =  ;
 
     public static double GRABBY_OPEN = 0.0;
     public static double GRABBY_CLOSE = 1.0;
@@ -57,7 +57,7 @@ public class Arm {
 
     //Elevator positions
     public static enum ElevatorPositions {
-        HIGH(3780),//5250
+        HIGH(3780),//3780
         MID(2750),//3700
         SHORT(1600),//2250
         LOW(214),//300

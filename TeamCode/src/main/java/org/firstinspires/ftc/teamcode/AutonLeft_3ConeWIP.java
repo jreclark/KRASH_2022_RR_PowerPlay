@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.AprilTags.AprilTagDetector;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "Auto Left - 3 Cone", group = "Comp", preselectTeleOp = "KRASH TeleOp")
+@Autonomous(name = "Auto Left - 3 Cones", group = "Comp", preselectTeleOp = "KRASH TeleOp")
 //@Disabled
 public class AutonLeft_3ConeWIP extends LinearOpMode {
 
