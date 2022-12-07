@@ -139,9 +139,9 @@ public class BasicDriving extends LinearOpMode {
                     myRobot.arm.setRotateBack();
                 }
                 elevatorManualOp = false;
-            } else if (gamepad2.dpad_left) {
-                myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.LOW);
-                elevatorManualOp = false;
+            //} else if (gamepad2.dpad_left) {
+             //   myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.LOW);
+             //   elevatorManualOp = false;
             } else if (gamepad2.a) {
                 if (myRobot.arm.isRotateFront()) {
                     myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.START_GROUND_GRAB);

@@ -43,7 +43,7 @@ public class Arm {
 
 
     public static double ROTATE_FRONT = 0.78;
-    public static double ROTATE_BACK =  ;
+    public static double ROTATE_BACK = 0.125 ; //0.1
 
     public static double GRABBY_OPEN = 0.0;
     public static double GRABBY_CLOSE = 1.0;
@@ -57,16 +57,16 @@ public class Arm {
 
     //Elevator positions
     public static enum ElevatorPositions {
-        HIGH(3780),//3780
-        MID(2750),//3700
-        SHORT(1600),//2250
-        LOW(214),//300
-        PIVOT_POINT(1600),//2250
-        START_AUTO_GRAB(1113),//1560
-        FIRST_AUTO_GRAB(630),//950
-        SECOND_AUTO_GRAB(500),//760
-        START_GROUND_GRAB(500),//700
-        DELTA_DROP(360);//500
+        HIGH(2700),//3780
+        MID(1950),//2750
+        SHORT(1130),//1600
+        LOW(145),//214
+        PIVOT_POINT(1150),//1600
+        START_AUTO_GRAB(820),//1113
+        FIRST_AUTO_GRAB(450),//630
+        SECOND_AUTO_GRAB(350),//500
+        START_GROUND_GRAB(368),//500
+        DELTA_DROP(265);//360
 
         public final int position;
 
