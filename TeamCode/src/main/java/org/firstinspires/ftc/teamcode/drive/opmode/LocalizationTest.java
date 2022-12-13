@@ -16,12 +16,14 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
  * exercise is to ascertain whether the localizer has been configured properly (note: the pure
  * encoder localizer heading may be significantly off if the track width has not been tuned).
  */
-@Disabled
+//@Disabled
 @TeleOp(group = "drive")
 public class LocalizationTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         HowellMecanumDrive drive = new HowellMecanumDrive(hardwareMap, telemetry);
+        Pose2d startPose = new Pose2d(-39, -64, Math.toRadians(90));
+        drive.setPoseEstimate(startPose);
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 

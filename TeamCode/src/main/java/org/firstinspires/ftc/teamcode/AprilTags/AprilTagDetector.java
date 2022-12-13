@@ -83,7 +83,7 @@ public class AprilTagDetector {
 
         camera.setPipeline(aprilTagDetectionPipeline);
 
-        camera.setMillisecondsPermissionTimeout(2500);
+        camera.setMillisecondsPermissionTimeout(5000);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {

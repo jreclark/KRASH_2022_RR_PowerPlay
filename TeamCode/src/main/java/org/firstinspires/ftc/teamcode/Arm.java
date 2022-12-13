@@ -46,7 +46,7 @@ public class Arm {
     public static double ROTATE_BACK = 0.125 ; //0.1
 
     public static double GRABBY_OPEN = 0.0;
-    public static double GRABBY_CLOSE = 1.0;
+    public static double GRABBY_CLOSE = 0.8;
 
     //Elevator PIDF Values
     public static double KV = 0.1;

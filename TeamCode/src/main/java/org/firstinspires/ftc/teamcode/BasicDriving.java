@@ -121,6 +121,7 @@ public class BasicDriving extends LinearOpMode {
                 elevatorManualOp = false;
             }
 
+
             if (gamepad2.dpad_up) {
                 myRobot.arm.elevatorPositionByConstant(Arm.ElevatorPositions.HIGH);
                 if (myRobot.arm.isSafeToRotate()) {
